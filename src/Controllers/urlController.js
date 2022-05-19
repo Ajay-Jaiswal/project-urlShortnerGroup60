@@ -51,7 +51,7 @@ const createShortUrl = async function(req, res){
 
         let findUrl = await urlModel.findOne({ longUrl: longUrl })
         if(findUrl)
-            return res.status(200).send({status: true, message: "Already created", data: findUrl})
+            return res.status(200).send({status: true, message: "Already created short url for this long url", data: findUrl})
     
         const urlCode = shortid.generate()    
         const shortUrl = baseUrl + '/' + urlCode
@@ -62,8 +62,9 @@ const createShortUrl = async function(req, res){
         const createUrl = await urlModel.create({urlCode: urlCode, longUrl: longUrl, shortUrl: shortUrl})
 
         // setting in cache
-        await SET_ASYNC(`${shortUrl}`, JSON.stringify(createUrl))
-        await SET_ASYNC(`${longUrl}`, JSON.stringify(createUrl))
+        //await SET_ASYNC(`${shortUrl}`, JSON.stringify(createUrl))
+        //await SET_ASYNC(`${longUrl}`, JSON.stringify(createUrl))
+        await SET_ASYNC(`${urlCode}`, JSON.stringify(createUrl))
 
         return res.status(201).send({status: true, message: "Successfully Shorten the URL.", data: createUrl})
 
