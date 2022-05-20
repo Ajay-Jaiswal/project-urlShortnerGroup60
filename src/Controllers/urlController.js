@@ -27,7 +27,7 @@ const GET_ASYNC = promisify(redisClient.GET).bind(redisClient);
 
 
 /****************************** Validation function*********************************/
-let keyValid = function (value) {
+let isValid = function (value) {
     if (typeof (value) === "undefined" || typeof (value) == null) { return false }
     if (typeof (value) === "string" && value.trim().length == 0) { return false }
     return true
@@ -40,7 +40,7 @@ const createShortUrl = async function(req, res){
         let data = req.body
         const { longUrl } = data
 
-        if (!Object.keys(data).length || !keyValid(data)) 
+        if (!Object.keys(data).length || !isValid(data)) 
             return res.status(400).send({ status: false, message: "Please enter your URL." }) 
 
         if (!validUrl.isUri(longUrl)) 
@@ -96,5 +96,4 @@ const getUrl=async function(req,res){
 }
 
 
-module.exports.createShortUrl = createShortUrl
-module.exports.getUrl = getUrl
+module.exports = { createShortUrl, getUrl }
